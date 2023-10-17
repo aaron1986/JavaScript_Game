@@ -13,40 +13,50 @@ export class Player {
     }
 
     update(input) {
-        this.x += this.speed;
-        if(input.includes("ArrowRight")) {
+        // Horizontal movement
+        if (input.includes("ArrowRight")) {
             this.speed = this.maxSpeed;
-        } else if(input.includes("ArrowLeft")) {
+        } else if (input.includes("ArrowLeft")) {
             this.speed = -this.maxSpeed;
         } else {
             this.speed = 0;
         }
-        if(this.x < 0) {
+
+        this.x += this.speed;
+
+        // Apply gravity
+        if (!this.onGround()) {
+            this.vy += this.weight;
+        } else {
+            this.vy = 0;
+        }
+
+        // Handle jumping
+        if (input.includes("ArrowUp") && this.onGround()) {
+            this.vy = -20; // Adjust the jump height as needed
+        }
+
+        this.y += this.vy;
+
+        // Ensure the player doesn't go below the ground
+        if (this.y > this.game.height - this.height) {
+            this.y = this.game.height - this.height;
+        }
+
+        // Ensure the player stays within the game boundaries
+        if (this.x < 0) {
             this.x = 0;
         }
-        if(this.x > this.game.width - this.width) {
+        if (this.x > this.game.width - this.width) {
             this.x = this.game.width - this.width;
         }
-
-        
-         if(input.includes("ArrowUp") && this.onGround()) {
-            this.vy -= 20;
-            this.y += this.vy; 
-        } 
-
-        if(this.onGround()) {
-            this.vy -= this.weight;
-        } else {
-           this.vy = 0;
-         }
     }
 
     draw(context) {
-        context.drawImage(this.image, 0, 0,this.width, this.height, this.x, this.y, this.width, this.height);
-
+        context.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
 
-     onGround() {
+    onGround() {
         return this.y >= this.game.height - this.height;
-    } 
+    }
 }
