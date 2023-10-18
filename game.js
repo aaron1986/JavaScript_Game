@@ -23,6 +23,7 @@ window.addEventListener("load", function () {
             this.projectiles = [];
             this.enemies = []; 
             this.knights = [];
+            this.score = 0;
         }
 
         checkCollisions() {
@@ -42,6 +43,7 @@ window.addEventListener("load", function () {
                         // Collision with 'enemy' detected
                         this.projectiles.splice(i, 1); // Remove the projectile
                         this.enemies.splice(j, 1); // Remove the enemy
+                        this.score += 10;
                     }
                 }
             }
@@ -62,6 +64,7 @@ window.addEventListener("load", function () {
                         // Collision with 'knight' detected
                         this.projectiles.splice(i, 1); // Remove the projectile
                         this.knights.splice(k, 1); // Remove the knight
+                        this.score += 20;
                     }
                 }
             }
@@ -103,6 +106,12 @@ window.addEventListener("load", function () {
             this.knights.push(knight);
         }
 
+        drawScore(context) {
+            context.font = "24px Arial"; // Adjust the font style and size
+            context.fillStyle = "white"; // Adjust the text color
+            context.fillText(`Score: ${this.score}`, 10, 30); // Adjust the position
+        }
+
         update(deltaTime) {
             this.background.update(deltaTime);
             this.player.update(this.input.keys);
@@ -142,6 +151,8 @@ window.addEventListener("load", function () {
                 knight.update();
                 knight.draw(context);
             });
+
+            this.drawScore(context); 
         }
     }
 
@@ -150,16 +161,16 @@ window.addEventListener("load", function () {
 
     let lastTime = 0;
 
-    function animate(timestamp) {
-        const deltaTime = (timestamp - lastTime) / 1000;
-        lastTime = timestamp;
-    
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        game.update(deltaTime);
-        game.checkCollisions();
-        game.draw(context);
-        requestAnimationFrame(animate);
-    }
+   function animate(timestamp) {
+    const deltaTime = (timestamp - lastTime) / 1000;
+    lastTime = timestamp;
 
-    animate(0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    game.update(deltaTime);
+    game.checkCollisions();
+    game.draw(context);
+    requestAnimationFrame(animate);
+}
+
+animate(0);
 });
