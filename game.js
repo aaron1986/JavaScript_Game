@@ -3,6 +3,8 @@ import { inputHandler } from './input.js';
 import { Background } from './background.js';
 import { Projectile } from './projectiles.js';
 import { Enemy } from './enemy.js'; 
+import { Knight } from './knight.js';
+
 
 window.addEventListener("load", function () {
     const canvas = this.document.getElementById("canvas");
@@ -17,17 +19,19 @@ window.addEventListener("load", function () {
             this.speed = 7;
             this.background = new Background(this);
             this.player = new Player(this);
-            this.input = new inputHandler(this); // Pass the game instance to inputHandler
+            this.input = new inputHandler(this); 
             this.projectiles = [];
-            this.enemies = []; // Initialize an empty array to store enemies
+            this.enemies = []; 
+            this.knights = [];
         }
 
         checkCollisions() {
+            // Check collisions with the 'enemy' enemies
             for (let i = this.projectiles.length - 1; i >= 0; i--) {
                 const projectile = this.projectiles[i];
                 for (let j = this.enemies.length - 1; j >= 0; j--) {
                     const enemy = this.enemies[j];
-    
+                    
                     // Check if the bounding boxes of the projectile and enemy intersect
                     if (
                         projectile.x < enemy.x + enemy.width &&
@@ -35,14 +39,33 @@ window.addEventListener("load", function () {
                         projectile.y < enemy.y + enemy.height &&
                         projectile.y + projectile.height > enemy.y
                     ) {
-                        // Collision detected
+                        // Collision with 'enemy' detected
                         this.projectiles.splice(i, 1); // Remove the projectile
                         this.enemies.splice(j, 1); // Remove the enemy
                     }
                 }
             }
+        
+            // Check collisions with the 'knight' enemies
+            for (let i = this.projectiles.length - 1; i >= 0; i--) {
+                const projectile = this.projectiles[i];
+                for (let k = this.knights.length - 1; k >= 0; k--) {
+                    const knight = this.knights[k];
+        
+                    // Check if the bounding boxes of the projectile and knight intersect
+                    if (
+                        projectile.x < knight.x + knight.width &&
+                        projectile.x + projectile.width > knight.x &&
+                        projectile.y < knight.y + knight.height &&
+                        projectile.y + projectile.height > knight.y
+                    ) {
+                        // Collision with 'knight' detected
+                        this.projectiles.splice(i, 1); // Remove the projectile
+                        this.knights.splice(k, 1); // Remove the knight
+                    }
+                }
+            }
         }
-
         createProjectile() {
             const playerX = this.player.x + this.player.width / 3;
             const playerY = this.player.y + this.player.height / 2;
@@ -57,24 +80,34 @@ window.addEventListener("load", function () {
         }
 
         spawnEnemy() {
-            const randomX = Math.random() * this.width; // Adjust the range
-            const randomY = Math.random() * this.height; // Adjust the range
-            const velocityX = 2; // Adjust the enemy's velocity
+            const randomX = Math.random() * this.width; 
+            const randomY = Math.random() * this.height; 
+            const velocityX = 2; 
             const velocityY = 0;
-            const imageSrc = './img/enemy.png'; // Provide the path to the enemy image
-            const health = 100; // Set enemy health
+            const imageSrc = './img/enemy.png'; 
+            const health = 100; 
 
             const enemy = new Enemy(randomX, randomY, velocityX, velocityY, imageSrc, health);
             this.enemies.push(enemy);
+        }
+
+        spawnKnight() {
+            const randomX = Math.random() * this.width;
+            const randomY = this.height - 345; 
+            const velocityX = 2;
+            const velocityY = 0;
+            const imageSrc = './img/knight-removebg-preview-removebg-preview.png'; 
+            const health = 150; 
+    
+            const knight = new Knight(randomX, randomY, velocityX, velocityY, imageSrc, health);
+            this.knights.push(knight);
         }
 
         update(deltaTime) {
             this.background.update(deltaTime);
             this.player.update(this.input.keys);
 
-            // Spawn enemies or add more logic to control enemy spawning
-            // For example, spawn an enemy every few seconds:
-            if (Math.random() < 0.01) { // Adjust the probability as needed
+            if (Math.random() < 0.01) { 
                 this.spawnEnemy();
             }
 
@@ -87,6 +120,10 @@ window.addEventListener("load", function () {
                 enemy.update();
                 enemy.draw(context);
             });
+
+            if (Math.random() < 0.005) {
+                this.spawnKnight();
+            }
         }
 
         draw(context) {
@@ -99,6 +136,11 @@ window.addEventListener("load", function () {
 
             this.enemies.forEach(enemy => {
                 enemy.draw(context);
+            });
+
+            this.knights.forEach(knight => {
+                knight.update();
+                knight.draw(context);
             });
         }
     }
@@ -114,7 +156,7 @@ window.addEventListener("load", function () {
     
         context.clearRect(0, 0, canvas.width, canvas.height);
         game.update(deltaTime);
-        game.checkCollisions(); // Check for collisions
+        game.checkCollisions();
         game.draw(context);
         requestAnimationFrame(animate);
     }
