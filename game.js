@@ -44,6 +44,11 @@ window.addEventListener("load", function () {
                         this.projectiles.splice(i, 1); // Remove the projectile
                         this.enemies.splice(j, 1); // Remove the enemy
                         this.score += 10;
+                         // Play the sound effect when firing a projectile
+                         const splatSound = document.getElementById('splatSound');
+                         if (splatSound) {
+                         splatSound.play();
+                         }
                     }
                 }
             }
@@ -65,6 +70,11 @@ window.addEventListener("load", function () {
                         this.projectiles.splice(i, 1); // Remove the projectile
                         this.knights.splice(k, 1); // Remove the knight
                         this.score += 20;
+                         // Play the sound effect when firing a projectile
+                        const knightKilledSound = document.getElementById('knightKilledSound');
+                        if (knightKilledSound) {
+                        knightKilledSound.play();
+                        }
                     }
                 }
             }
@@ -80,6 +90,12 @@ window.addEventListener("load", function () {
 
             const projectile = new Projectile(playerX, playerY, velocityX, velocityY, imageSrc);
             this.projectiles.push(projectile);
+
+            // Play the sound effect when firing a projectile
+            const projectileSound = document.getElementById('projectileSound');
+            if (projectileSound) {
+            projectileSound.play();
+            }
         }
 
         spawnEnemy() {
@@ -107,9 +123,9 @@ window.addEventListener("load", function () {
         }
 
         drawScore(context) {
-            context.font = "24px Arial"; // Adjust the font style and size
-            context.fillStyle = "white"; // Adjust the text color
-            context.fillText(`Score: ${this.score}`, 10, 30); // Adjust the position
+            context.font = "45px Arial"; 
+            context.fillStyle = "white"; 
+            context.fillText(`Score: ${this.score}`, 10, 50); 
         }
 
         update(deltaTime) {
