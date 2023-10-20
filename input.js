@@ -17,7 +17,7 @@ export class inputHandler {
                 // Create a projectile when 'm' is pressed
                 this.game.createProjectile();
             }
-            console.log(e.key, this.keys);
+            
         });
 
         window.addEventListener("keyup", (e) => {

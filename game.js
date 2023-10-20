@@ -24,6 +24,7 @@ window.addEventListener("load", function () {
             this.enemies = []; 
             this.knights = [];
             this.score = 0;
+            //this.score = parseInt(localStorage.getItem('score')) || 0;
         }
 
         checkCollisions() {
@@ -122,12 +123,24 @@ window.addEventListener("load", function () {
             this.knights.push(knight);
         }
 
+        
+        
         drawScore(context) {
-            context.font = "45px Arial"; 
-            context.fillStyle = "white"; 
-            context.fillText(`Score: ${this.score}`, 10, 50); 
-        }
+            context.font = "45px Arial";
+            context.fillStyle = "white";
+            context.fillText(`Score: ${this.score}`, 10, 50);
+            
 
+            let highScores = JSON.parse(localStorage.getItem("score"));
+            highScores = [];
+            let playerScore = this.score;
+            highScores.push(playerScore);
+            console.log(highScores);
+            localStorage.setItem('score', highScores);
+        }
+        
+  
+        
         update(deltaTime) {
             this.background.update(deltaTime);
             this.player.update(this.input.keys);
@@ -190,3 +203,4 @@ window.addEventListener("load", function () {
 
 animate(0);
 });
+
