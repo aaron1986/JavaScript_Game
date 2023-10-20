@@ -7,16 +7,14 @@ export class Enemy {
         this.velocityY = velocityY;
         this.image = new Image();
         this.image.src = imageSrc;
-        this.width = 50; // Adjust the width of the enemy
-        this.height = 50; // Adjust the height of the enemy
+        this.width = 50; 
+        this.height = 50; 
         this.health = health;
     }
 
     update() {
-        // Update enemy position based on its velocity and any game logic
         this.x -= this.velocityX;
         this.y += this.velocityY;
-        // Add more logic to control enemy behavior, e.g., following the player
     }
 
     draw(context) {

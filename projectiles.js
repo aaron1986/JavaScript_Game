@@ -7,12 +7,11 @@ export class Projectile {
         this.velocityY = velocityY;
         this.image = new Image();
         this.image.src = imageSrc;
-        this.width = 20; // Set the width of the projectile
-        this.height = 20; // Set the height of the projectile
+        this.width = 20; 
+        this.height = 20; 
     }
 
     update() {
-        // Update the projectile's position based on its velocity
         this.x += this.velocityX;
         this.y += this.velocityY;
     }

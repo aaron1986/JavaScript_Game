@@ -2,7 +2,7 @@ export class Player {
     constructor(game) {
         this.game = game;
         this.width = 200;
-        this.height = 200;
+        this.height = 250;
         this.x = 0;
         this.y = this.game.height - this.height;
         this.vy = 0;
@@ -24,26 +24,26 @@ export class Player {
 
         this.x += this.speed;
 
-        // Apply gravity
+        // gravity
         if (!this.onGround()) {
             this.vy += this.weight;
         } else {
             this.vy = 0;
         }
 
-        // Handle jumping
+        // jumping
         if (input.includes("ArrowUp") && this.onGround()) {
             this.vy = -20; // Adjust the jump height as needed
         }
 
         this.y += this.vy;
 
-        // Ensure the player doesn't go below the ground
+        // player doesn't go below the ground
         if (this.y > this.game.height - this.height) {
             this.y = this.game.height - this.height;
         }
 
-        // Ensure the player stays within the game boundaries
+        // player stays within the game boundaries
         if (this.x < 0) {
             this.x = 0;
         }

@@ -8,7 +8,7 @@ export class Knight {
         this.image = new Image();
         this.image.src = imageSrc;
         this.width = 90; 
-        this.height = 360;
+        this.height = 350;
         this.health = health;
     }
 
