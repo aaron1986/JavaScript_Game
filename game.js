@@ -34,6 +34,7 @@ window.addEventListener("load", function () {
             this.player.playerHealth = localStorage.getItem("playerHealth") || this.playerMaxHealth;           
             this.player.score = 0;
             this.collisionHandler = new CollisionHandler(this.player, this.projectiles, this.enemies, this.knights);
+            this.gameOver = false;
         }
 
         resetPlayerHealth() {
@@ -82,8 +83,6 @@ window.addEventListener("load", function () {
             const knight = new Knight(randomX, randomY, velocityX, velocityY, imageSrc, health);
             this.knights.push(knight);
         } //end of spawnKnight
-
-        
         
         drawScore(context) {
             context.font = "45px Arial";
@@ -91,6 +90,14 @@ window.addEventListener("load", function () {
             context.fillText(`Score: ${this.player.score}`, 10, 50);
             
         } //end of drawScore
+
+        handleGameRestart() {
+            if (this.input.keys['KeyY'] && this.player.playerHealth <= 0) {
+                this.resetPlayerHealth();
+                this.player.score = 0;
+                this.gameOver = false;
+            }
+        }
         
         update(deltaTime) {
             
@@ -117,6 +124,15 @@ window.addEventListener("load", function () {
 
             //collision class
             this.collisionHandler.checkCollisions();
+
+            if (this.gameOver) {
+                this.handleGameRestart();
+                return;
+            }
+
+            if (this.player.playerHealth <= 0) {
+                this.gameOver = true;
+            }
 
         } //end of deltaTime
 
@@ -147,10 +163,17 @@ window.addEventListener("load", function () {
             context.fillStyle = "red";
             const remainingHealthWidth = (this.player.playerHealth / this.playerMaxHealth) * this.healthBarWidth;
             context.fillRect(this.healthBarX, this.healthBarY, remainingHealthWidth, this.healthBarHeight);
+            
+            if (this.gameOver) {
+                context.font = "40px Arial";
+                context.fillStyle = "red";
+                context.fillText("Game Over", this.width / 2 - 100, this.height / 2);
+                context.fillText("Press 'Y' to Play Again", this.width / 2 - 160, this.height / 2 + 50);
+            }
+
+            //context.clearRect(0, 0, canvas.width, canvas.height);
 
         } //end of context
-
-        
  
     } //end of game class
    
@@ -164,17 +187,14 @@ window.addEventListener("load", function () {
     lastTime = timestamp;
 
     context.clearRect(0, 0, canvas.width, canvas.height);
+   
     game.update(deltaTime);
     game.draw(context);
     requestAnimationFrame(animate);
+    
 } //end of timstamp
 
-
-function startNewGame() {
-    game.resetPlayerHealth();
-}
-
-startNewGame();
+game.resetPlayerHealth();
 
 animate(0);
 }); // end of window edvent listener

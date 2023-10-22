@@ -60,8 +60,8 @@ export class CollisionHandler {
                     hurt.play();
                 }
                 // when health reaches zero or less - Game Over!
-                if (this.player.playerHealth <= 0) {
-                    console.log("Game Over!");
+                if (this.player.playerHealth < 0) {
+                    
                 }
             }
         } //end of j for loop
@@ -113,8 +113,8 @@ export class CollisionHandler {
                     hurt.play();
                 }
                 // when health reaches zero or less - Game Over!
-                if (this.player.playerHealth <= 0) {
-                    console.log("Game Over!");
+                if (this.player.playerHealth < 0) {
+                    
                 } //end of if statement
             } //else
         } //end of knight collisions for loop
